@@ -1,0 +1,93 @@
+{% extends "bshop/base.html" %}
+{%load staticfiles %}
+{% block orders %}
+
+<div class="container">
+    <div class="row visible-sm-block" style="padding-top: 40px"></div>
+
+        <ol class="breadcrumb">
+            <li><a href="/">Главная</a> </li>
+            <li><a href="/adm_/?order=False">Корзины</a> </li>
+            <li class="active">Корзина № {{ cart.id }}</li>
+        </ol>
+        <div class="col-md-12">
+            <form class="form-horizontal" role="form" method="post">
+                {% csrf_token %}
+                <H3>Информация о пользователе </H3>
+
+                <div class="row">
+                        <div class="col-sm-8" style="padding-top: 20px">
+                                <div class="col-sm-4 text-left">
+                                    <img>
+                                        <img src={% static "/img/profile.gif" %} alt="" class="img-circle img-responsive " width="100" height="170"></img>
+                                    </figure>
+                                    <h2> {% if client.user.username != 'None' %} {{ client.user.username }} {% else %} {{ order.person.last_name }} {% endif %} </h2>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    {% if client.user.username != 'None' %}
+                                    <h4> {{ client.user.last_name }} {{ client.user.first_name }}  {{ client.middle_name }}</h4>
+                                    <h5> Адрес: {{ client.address }} </h5>
+                                    <h4> Телефон: {{ client.tel }} </h4>
+                                    <h4> Email: {{ client.user.email }} </h4>
+                                    {% else %}
+                                    <h4> {{ order.person.last_name }} {{ order.person.first_name }}  {{ order.person.middle_name }}</h4>
+                                    <h5> Адрес: {{ order.person.address }} </h5>
+                                    <h4> Телефон: {{ order.person.tel }} </h4>
+                                    <h4> Email: {{ order.person.email }} </h4>
+                                    {% endif %}
+                                </div>
+                        </div>
+                </div>
+                <H3>Товары в корзине {{ cart.id }} от {{ cart.datetime|date:"d E Y" }}, {{ cart.datetime|time:"H" }}:{{ cart.datetime|time:"i" }} </H3>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="table-responsive">
+
+                                <table class="table table-stripped table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th> Номер п/п </th>
+                                            <th> Наименование </th>
+                                            <th> Цена </th>
+                                            <th> Количество </th>
+                                            <th> Сумма </th>
+                                            <th> Предзаказ </th>
+                                            <th> В наличии/ из них зарегистрировано </th>
+                                        </tr>
+                                        {% for item, pre_quantity in pre_quantity %}
+                                        <tr>
+                                            <td> {{ forloop.counter }} </td>
+                                            <td> <a href= "{{item.product.get_absolute_url }}" > {{ item.product.product.name }} </a>  </td>
+                                            <td> {{ item.product.cost }} р. </td>
+                                            <td> {{ item.quantity }} </td>
+                                            <td> {{ item.amount }} р. </td>
+                                            <td> {% if item.is_preorder %} Предзаказ {% else %} Из наличия {% endif %} </td>
+                                            <td> {% if item.is_calculate %}
+                                                 <div class="alert-success">
+                                                 {% else %}
+                                                 <div class="alert-warning">
+                                                 {% endif %}
+                                                 {% if not item.is_preorder %} В наличии -  {{ item.product.quantity }}, Из них в резерве {{ item.product.quantity_in_reserv }}
+                                                     {% else %} Из предзаказа. Всего заказано {{ pre_quantity }} {% endif %}
+                                                 </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-sm-offset-1">
+                            {{ form.as_div }}
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-4" >
+                        <button type="submit" class="btn btn-lg btn-primary" name="Save"> Удалить корзину и освободить зарезервированный товар </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

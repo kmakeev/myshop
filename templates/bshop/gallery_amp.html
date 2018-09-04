@@ -1,0 +1,54 @@
+{% extends "bshop/base.html" %}
+{%load staticfiles %}
+
+{% block row %}
+
+    <div class="container">
+        <div class="row visible-sm-block" style="padding-top: 40px"></div>
+        <div class="row">
+            <ol class="breadcrumb" >
+                <li><a href="/">Главная</a> </li>
+                <li> <a href="/gallery/">Галерея</a> </li>
+                <li class="active">{{ amp.name }}</li>
+            </ol>
+
+            <div class="col-md-12">
+                <div id="carousel-generic" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        {% for photo in photos %}
+                        <li data-target="#carousel-generic" data-slide-to="{{ forloop.counter }}" {% if forloop.first %} class="active" {% endif %}></li>
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner">
+                        {% for photo in photos %}
+                        {% if forloop.first %}
+                        <div class="item active">
+                            <a class="example-image-link" href= {% static photo.foto_original %} data-lightbox="example-set" data-title="Click anywhere outside the image or the X to the right to close.">
+                                <img class="slide-image" src={% static photo.foto_800x400|default:"/static/img/800x400.png" %} alt="">
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="item">
+                            <a class="example-image-link" href= {% static photo.foto_original %} data-lightbox="example-set" data-title="Click anywhere outside the image or the X to the right to close.">
+                                <img class="slide-image" src={% static photo.foto_800x400|default:"/static/img/800x400.png" %} alt="">
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-generic" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+                <p> </p>
+                <H2> {{ amp.name }} </H2>
+                <H4> {{ amp.description }} </H4>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

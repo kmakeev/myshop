@@ -1,0 +1,113 @@
+{% extends "bshop/base.html" %}
+{%load staticfiles %}
+
+{% block product %}
+ <div class="container">
+     <div class="row visible-sm-block" style="padding-top: 40px"></div>
+     <div class="row">
+                <ol class="breadcrumb">
+                    <li><a href="/">Главная</a> </li>
+                    <li><a href=
+                    {% for item in menu %}
+                    {% if item.get_absolute_url in path %} {{item.get_absolute_url}}>{{ item.name }}</a> {% endif %}
+                    {% endfor %}
+                    </li>
+                    <li class="active">{{ prod.product.name }}</li>
+                </ol>
+         <div class="col-md-3 hidden-xs hidden-sm">
+             <p class="lead">Каталог</p>
+                {% include "bshop/catalog.html" %}
+             <H4>Друзья</H4>
+             <H4> <a href="http://radioland.1bbs.info">radioland.1bbs.info</a></H4>
+         </div>
+
+        <div class="col-md-9">
+            <div id="carousel-generic" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    {% for photo in photos %}
+                    <li data-target="#carousel-generic" data-slide-to="{{ forloop.counter }}" {% if forloop.first %} class="active" {% endif %}></li>
+                    {% endfor %}
+                </ol>
+                <div class="carousel-inner">
+                    {% for photo in photos %}
+                    {% if forloop.first %}
+                    <div class="item active">
+                        <a class="example-image-link" href= {% static photo.foto_original %} data-lightbox="example-set" data-title="Click anywhere outside the image or the X to the right to close.">
+                            <img class="slide-image" src={% static photo.foto_800x400|default:"/static/img/800x400.png" %} alt="">
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="item">
+                        <a class="example-image-link" href= {% static photo.foto_original %} data-lightbox="example-set" data-title="Click anywhere outside the image or the X to the right to close.">
+                            <img class="slide-image" src={% static photo.foto_800x400|default:"/static/img/800x400.png" %} alt="">
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-generic" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+            <p> </p>
+            <H2> {{ prod.product.name }} {% if not prod.is_not_arhive %} (Товар не доступен для заказа) {% endif %}</H2>
+            <H4> {{ prod.product.description }}</H4>
+            {% if prod.is_preorder %} <div class="alert alert-warning">Только предзаказ. Планируемая дата поставки - {{ prod.date_of_delivery|date:"d E Y" }} г.</div>
+            {% elif is_missing%} <div class="alert alert-info"> К сожалению весь товар находится в резерве пользователей, возможно он станет свободным в ближайшее время (Осталось - {{ prod.quantity }}, Зарезервировано - {{ prod.quantity_in_reserv}} ) </div>
+            {% elif not is_missing%} <div class="alert alert-success"> Из наличия (Осталось - {{ prod.quantity }}, Зарезервировано - {{ prod.quantity_in_reserv}}) </div>
+            {% endif %}
+            <form name="{{ form.form_name }}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-4" style="padding-top: 10px">
+                        <H4> Цена {{ prod.cost }} р. </H4>
+                    </div>
+                    <div class="col-md-4" style="padding-top: 10px">
+                        <input class="form-control input-lg id="quantity" {{ form.quantity }}
+                    </div>
+                    {% if prod.is_not_arhive and prod.is_preorder %}
+                    <div class="col-md-1" style="padding-top: 10px">
+                        <button class="btn btn-success btn-lg" type="submit", name="Add">  В корзину </button>
+                    </div>
+                    {% elif prod.is_not_arhive and prod.is_in_stock and prod.quantity > prod.quantity_in_reserv %}
+                    <div class="col-md-1" style="padding-top: 10px">
+                        <button class="btn btn-success btn-lg" type="submit", name="Add">  В корзину </button>
+                    </div>
+                    {% else %}
+                    <div class="col-md-1" style="padding-top: 10px">
+                        <a href="#" class="btn btn-success btn-lg disabled">  В корзину </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+            {% if drawings %}
+            <H4> Чертежи: </H4>
+            <ul>
+                {% for item in drawings %}
+                <li> <a href={% static item.file %}>{{ item.name }}  <img src={% static "/img/pdf-ico.jpg" %} width="20" height="20" alt=""/> </a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <H2> <small> Вместе с этим выбирают: </small></H2>
+            <div class="row">
+                {% for item in jointly %}
+                {% include "bshop/one_jointly.html" %}
+                {% endfor %}
+                <!--
+                <ul class="pager">
+                    <li class="previous disabled"><a href="#">&larr; Старая</a></li>
+                    <li class="next"><a href="#">Новая &rarr;</a></li>
+                </ul> -->
+            </div>
+
+        </div>
+
+     </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "bshop/base.html" %}
+
+{% block row %}
+
+    <div class="container">
+        <div class="row visible-sm-block" style="padding-top: 40px"></div>
+        <div class="row">
+            <ol class="breadcrumb" >
+                <li><a href="/">Главная</a> </li>
+                <li class="active">Галерея</li>
+            </ol>
+
+            <div class="col-md-12">
+                {% include "bshop/carousel.html" %}
+                <p> </p>
+                    {% if found_entries %}
+                    <h2> <small> {{ query_string }} </small></h2>
+                    {% for item in found_entries %}
+                        {% include "bshop/one_amplifier.html" %}
+                    {% endfor %}
+                    {% else %}
+                        <h2> <small> Нет информации для отображения  </small></h2>
+                    {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

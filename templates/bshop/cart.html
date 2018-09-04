@@ -1,0 +1,71 @@
+{% extends "bshop/base.html" %}
+{% load staticfiles %}
+{% block cart %}
+
+<div class="container">
+    <div class="row visible-sm-block" style="padding-top: 40px"></div>
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="/">Главная</a> </li>
+            <li class="active">Корзина</li>
+        </ol>
+        <div class="col-md-12">
+            {% if not alert_archive %}
+            <div class="alert alert-danger">
+                <p>Внимание!!! В вашей корзине присутствуют товары недоступные к заказу в настоящее время. Пожалуйста, удалите или замените их на актуальные.</p>
+            </div>
+            {% endif %}
+            <H3>  Корзина </H3>
+            <form action= {{ path }} method="post">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                {{ formset.management_form }}
+                                {% csrf_token %}
+                                <tbody>
+                                    <tr>
+                                        <th> Наименование </th>
+                                        <th> Категория </th>
+                                        <th> Условия поставки </th>
+                                        <th> Цена </th>
+                                        <th> Количество </th>
+                                        <th> Сумма </th>
+                                        <th> Удалить выбранное</th>
+                                    </tr>
+                                    {% for item, form in data.pairs %}
+                                    <tr {% if not item.product.is_not_arhive %} class="danger" {% endif %}>
+                                        <td> <a href= "{{item.product.get_absolute_url }}" > {{ item.product.product.name }} </a> </td>
+                                        <td> {{ item.product.product.category.name }} </td>
+                                        <td> {% if item.product.is_preorder %} Предзаказ {% else %} Из наличия {% endif %} </td>
+                                        <td> {{ item.product.cost }}</td>
+                                        <td>
+                                            {{ form.quantity }}
+                                        </td>
+                                        <td> {{ item.amount }} </td>
+                                        <td> {%if formset.can_delete %} {{ form.DELETE}} {% endif %} </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td> Итого - {{ summ_in_cart }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary btn-lg" name="Reload" {% if cart_length == 0 %} disabled="disabled" {% endif %}> Обновить </button>
+                        {% if user.is_authenticated %}
+                        {% include "bshop/modal/placecart.html" %}
+                        <a href="#confirmCart" class="btn btn-success btn-lg {% if cart_length == 0 or not alert_archive %}disabled{% endif %}" data-toggle="modal"> Оформить </a>
+                        {% else %}
+                        {% include "bshop/modal/confirm.html" %}
+                        <a href="#confirmModal" class="btn btn-success btn-lg {% if cart_length == 0 or not alert_archive %}disabled{% endif %}" data-toggle="modal"> Оформить </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

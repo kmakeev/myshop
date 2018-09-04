@@ -1,0 +1,8 @@
+<ul class="list-group">
+{% for item in sort %}
+    <li class="list-group-item {% if p.sort == item.0 %} list-group-item-info {% endif %}">
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.ispreorder %}ispreorder={{p.ispreorder}}&{% endif %}sort={{ item.0 }}">{{ item.1 }}</a></li>
+{% endfor %}
+    <li class="list-group-item {% if not p.sort %} list-group-item-info {% endif %}">
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.ispreorder %}ispreorder={{p.ispreorder}}{% endif %}">Автоматически</a></li>
+</ul>

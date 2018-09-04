@@ -1,0 +1,8 @@
+<ul class="list-group">
+    <li class="list-group-item {% if p.ispreorder == 'True' %} list-group-item-info {% endif %}">
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.sort %}sort={{p.sort}}&{% endif %}ispreorder=True">Предзаказ</a></li>
+    <li class="list-group-item {% if p.ispreorder == 'False' %} list-group-item-info {% endif %}">
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.sort %}sort={{p.sort}}&{% endif %}ispreorder=False">Из наличия</a></li>
+    <li class="list-group-item {% if not p.ispreorder%} list-group-item-info {% endif %}">
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.sort %}sort={{p.sort}}&{% endif %}">Все</a></li>
+</ul>

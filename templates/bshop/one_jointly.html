@@ -1,0 +1,16 @@
+{%load staticfiles %}
+{% if item.is_not_arhive %}
+<div class="col-xs-6 col-md-3">
+    <div class="thumbnail">
+        <a href={{ item.id}} > <img src={% static item.product.get_image|default:"/static/img/320x170.png" %} width="320" height="170" alt=""/> </a>
+        <div class="caption">
+            <h4> {{ item.product.name }}</h4>
+            <h6> Цена - {{ item.cost }} р.</h6>
+            <h6> {% if item.is_in_stock %} <p> В наличии - {{ item.quantity }} {% else %} Нет в наличии </p>
+                {% if item.is_preorder %} <p> Доступен для предзаказа{% else %} Предзаказ не возможен  </p>{% endif %}
+                {% endif %}</h6>
+            <!--<p> <a href="#" class="btn btn-default btn-xs" role="button">Посмотреть</a></p> -->
+        </div>
+    </div>
+</div>
+{% endif %}

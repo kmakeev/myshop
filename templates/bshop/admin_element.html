@@ -1,0 +1,50 @@
+{% extends "bshop/base.html" %}
+{%load staticfiles %}
+{% block orders %}
+
+<div class="container">
+    <div class="row visible-sm-block" style="padding-top: 40px"></div>
+
+        <ol class="breadcrumb">
+            <li><a href="/">Главная</a> </li>
+            <li><a href="/adm_/?order=False">Корзины</a> </li>
+            <li class="active">Элемент № {{ element.id }}</li>
+        </ol>
+        <div class="col-md-12">
+            <form class="form-horizontal" role="form" method="post">
+                {% csrf_token %}
+                <H3>Элемент корзины {{ element.id }} </H3>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="table-responsive">
+                                <table class="table table-stripped table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th> Наименование </th>
+                                            <th> Цена </th>
+                                            <th> Количество </th>
+                                            <th> Сумма </th>
+                                            <th> Предзаказ </th>
+                                        </tr>
+                                        <tr>
+                                            <td> <a href= "{{element.product.get_absolute_url }}" > {{ element.product.product.name }} </a>  </td>
+                                            <td> {{ element.product.cost }} р. </td>
+                                            <td> {{ element.quantity }} </td>
+                                            <td> {{ element.amount }} р. </td>
+                                            <td> {% if element.is_preorder %} Предзаказ {% else %} Из наличия {% endif %} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-4" >
+                        <button type="submit" class="btn btn-lg btn-primary" name="Delete"> Удалить элемент </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

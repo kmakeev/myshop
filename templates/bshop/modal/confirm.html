@@ -1,0 +1,24 @@
+<!-- HTML-код модального окна -->
+<div id="confirmModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Заголовок модального окна -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Оформление заказа</h4>
+      </div>
+
+      <div class="modal-body">
+        <p> Вы можете продолжить оформление заказа зареристрировавшись на сайте, либо заполнив контактную информацию далее.</p>
+        <p> В дальнейшем зарегистрированный пользователь сможет быстрее оформлять заказы, отслеживать их и просматривать свою историю заказов. </p>
+        <a href="/accounts/login/?next={{ path }}"> <H4> Я уже зарегистрирован на сайте </H4> </a>
+      </div>
+      <!-- Футер модального окна -->
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button> -->
+            <a href="/accounts/register/?next={{ path }}" class="btn btn-success btn-lg">Зарегистрироваться</a>
+            <a href="/cart/notlogin/" class="btn btn-default btn-lg">Продолжить без регистрации</a>
+      </div>
+    </div>
+  </div>
+</div>

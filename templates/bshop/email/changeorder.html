@@ -1,0 +1,72 @@
+{% extends "bshop/email/base.html" %}
+{% block register %}
+<table class="body-wrap">
+    <tr>
+        <td class="container">
+            <table>
+                <tr>
+                    <td align="center" class="masthead">
+                        <h1>Изменение статуса заказа</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="content">
+                        <h2>Здравствуйте {{ first_name }}! </h2>
+                        <p> Статус Вашего заказ № {{ order.id }} сформированного {{ order.datetime|date:"d E Y" }} в {{ order.datetime|time:"H" }}:{{ order.datetime|time:"i" }}, изменился на {{ order.get_status_display }} </p>
+                        <p> Позиции заказа</p>
+                        <table>
+                             <tbody>
+                                <tr>
+                                    <th> Номер п/п </th>
+                                    <th> Наименование </th>
+                                    <th> Цена </th>
+                                    <th> Количество </th>
+                                    <th> Сумма </th>
+                                    <th> Предзаказ </th>
+                                </tr>
+                                    {% for item in positions %}
+                                <tr>
+                                    <td align="center"> {{ forloop.counter }} </td>
+                                    <td align="center"> <a href= "http://myamp.online/{{item.product.get_absolute_url }}" > {{ item.product.product.name }} </a>  </td>
+                                    <td align="center"> {{ item.product.cost }} р. </td>
+                                    <td align="center"> {{ item.quantity }} </td>
+                                    <td align="center"> {{ item.amount }} р. </td>
+                                    <td align="center"> {% if item.is_preorder %} Предзаказ {% else %} Из наличия {% endif %} </td>
+                                </tr>
+                                    {% endfor %}
+                                <tr>
+                                    <td> Всего {{ positions|length }} на - {{ order.list.summ }} р.</td>
+                                </tr>
+                                <tr>
+                                    <!-- <td> Комментарий: {{ order.comment}} </td> -->
+                                </tr>
+                    </tbody>
+                </table>
+                        <p> Отследить статус заказа, можно перейдя по ссылке <a href= "http://myamp.online{{order.get_absolute_url }}" > http://myamp.online{{order.get_absolute_url }} </a> и зайдя на сайт под свой учетной записью.</p>
+                        <p> Если у Вас возникли вопросы, напишите нам по электронной почте <a href="mailto:myamp.online@gmail.com">myamp.online@gmail.com</a> </p>
+                        <p><em> С Уважением !</em></p>
+
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="container">
+
+            <!-- Message start -->
+            <table>
+                <tr>
+                    <td class="content footer" align="center">
+                        <p>Sent by <a href="http://myamp.online">myamp.online</a>, Russian, Moscow, 2017</p>
+                        <p><a href="mailto:myamp.online@gmail.com">myamp.online@gmail.com</a> </p>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+</body>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "bshop/base.html" %}
+{%load staticfiles %}
+
+{% block orders %}
+<div class="container">
+    <div class="row visible-sm-block" style="padding-top: 40px"></div>
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="/">Главная</a> </li>
+            {% if query_string %}
+            <li><a href="/adm_">Заказы</a> </li>
+            <li class="active">Поиск - {{ query_string }}</li>
+            {% else %}
+            <li class="active">Заказы</li>
+            {% endif %}
+        </ol>
+        <div class="col-md-12">
+            <H3>Список заказов (Всего {{ count }} записей на сумму {{ summ|floatformat:2 }}р.) </H3>
+                    <div class="row">
+                        <div class="col-sm-8" style="padding-top: 20px">
+                            <div class="table">
+                                <table class="table table-striped table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th>Пользователь</th>
+                                            <th>Информация </th>
+                                            <!--<th> Дата, время создания </th>
+                                            <th> Сумма </th>
+                                            <!-- <th> Комментарий </th> -->
+                                            <th>Статус</th>
+                                            <th>Предоплата</th>
+                                            <th>Отправляем</th>
+
+                                        </tr>
+                                        {% for item in orders %}
+                                        <tr>
+                                            {% if item.list.owner.user.username != 'None' %}
+                                            <td><a href= "client/{{ item.list.owner.id }}" title="{{ item.list.owner.full_info }}"> {{ item.list.owner.user.first_name }} {{ item.list.owner.user.last_name }}</a></td>
+                                            {% else %}
+                                            <td><a href= "#" title="{{ item.list.owner.full_info }}">{{ item.person.first_name }} {{ item.person.last_name }}</a></td>
+                                            {%endif %}
+                                            <td><a href= "order/{{item.id }}" title="Комментарий: {{ item.comment }}"> Заказ № {{ item.id }} от {{ item.datetime|date:"d E Y" }} на сумму {{ item.list.summ }}</a></td>
+                                            <!--<td> {{ item.datetime|date:"d E Y" }}, {{ item.datetime|time:"H" }}:{{ item.datetime|time:"i" }} </td>
+                                            <td> {{ item.list.summ }} </td>
+                                            <!-- <td> {{ item.comment }}  </td> -->
+                                            <td>{{ item.get_status_display }}</td>
+                                            <td>{{ item.prepay }}</td>
+                                            <td>{{ item.get_type_of_dispatch_display }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <ul class="pager">
+                                    {% if orders.has_previous %}
+                                    <li class="previous">
+                                        <a href="?{% if p.order %}order={{ p.order }}&{% endif %}{% if p.status %}status={{p.status}}&{% endif %}{% if p.ispreorder %}ispreorder={{p.ispreorder}}&{% endif %}page={{ orders.previous_page_number }}">Предыдущая</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="previous disabled">
+                                        <a href="#">Предыдущая</a>
+                                    </li>
+                                    {% endif %}
+                                    <span class="current">
+                                        Страница {{ orders.number }} из {{ orders.paginator.num_pages }}.
+                                    </span>
+                                    {% if orders.has_next %}
+                                    <li class="next">
+                                        <a href="?{% if p.order %}order={{ p.order }}&{% endif %}{% if p.status %}status={{p.status}}&{% endif %}{% if p.ispreorder %}ispreorder={{p.ispreorder}}&{% endif %}page={{ orders.next_page_number }}">Следующая</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="next disabled">
+                                        <a href="#">Следующая</a>
+                                    </li>
+                                    {% endif %}
+
+                            </ul>
+                        </div>
+                        <div class="col-sm-3 col-sm-offset-1" style="padding-top: 20px">
+                            <H4> Информация по каталогу</H4>
+                            {% include "bshop/admin_catalog.html" %}
+
+                            <H4>Тип</H4>
+                            <ul class="list-group">
+                                <li class="list-group-item {% if not p.order or p.order != 'False' %} list-group-item-info {% endif %}">
+                                    <a href="?order=True{% if p.status %}&status={{p.status}}{% endif %}{% if p.ispreorder %}&ispreorder={{p.ispreorder}}{% endif %}{% if p.start_date %}&start_date={{p.start_date}}{% endif %}{% if p.end_date %}&end_date={{p.end_date}}{% endif %}">Заказ</a></li>
+                                <li class="list-group-item {% if p.order == 'False' %} list-group-item-info {% endif %}">
+                                    <a href="?order=False{% if p.status %}&status={{p.status}}{% endif %}{% if p.ispreorder %}&ispreorder={{p.ispreorder}}{% endif %}{% if p.start_date %}&start_date={{p.start_date}}{% endif %}{% if p.end_date %}&end_date={{p.end_date}}{% endif %}">Корзина</a></li>
+
+                            </ul>
+                            <H4> Период</H4>
+                            <form action= {{ path }} method="get" class="form" name="{{ form.form_name }}">
+                                <div class="form-group">
+                                    <label for="{{ form.start_date.id_for_label }}">{{ form.start_date.label }}</label>
+                                    <input type="text" class="form-control" id="{{form.start_date.id_for_label}}" {{ form.start_date }}
+                                    <label for="{{ form.end_date.id_for_label }}">{{ form.end_date.label }}</label>
+                                    <input type="text" class="form-control" id="{{form.end_date.id_for_label}}" {{ form.end_date }}
+                                    <div class="btn-group-sm" style="padding-top: 10px">
+                                        <button class="btn btn-info" type="submit">Обновить</button>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                            <H4>Статус </H4>
+                            <ul class="list-group">
+                            {% for item in status %}
+                                <li class="list-group-item {% if p.status == item.0 %} list-group-item-info {% endif %}">
+                                    <a href="?{% if p.order %}order={{p.order}}&{% endif %}status={{ item.0 }}{% if p.ispreorder %}&ispreorder={{p.ispreorder}}{% endif %}{% if p.start_date %}&start_date={{p.start_date}}{% endif %}{% if p.end_date %}&end_date={{p.end_date}}{% endif %}">{{ item.1 }}</a></li>
+                            {% endfor %}
+                                <li class="list-group-item {% if p.status == 'ALL' or not p.status %} list-group-item-info {% endif %}">
+                                    <a href="?{% if p.order %}order={{p.order}}{% endif %}{% if p.ispreorder %}&ispreorder={{p.ispreorder}}{% endif %}{% if p.start_date %}&start_date={{p.start_date}}{% endif %}{% if p.end_date %}&end_date={{p.end_date}}{% endif %}">Все</a></li>
+
+                            </ul>
+                            <H4>Предзаказ/Из наличия</H4>
+                            <ul class="list-group">
+                                <li class="list-group-item {% if p.ispreorder == 'True' %} list-group-item-info {% endif %}">
+                                    <a href="?{% if p.order %}order={{ p.order }}&{% endif %}{% if p.status %}status={{p.status}}&{% endif %}ispreorder=True{% if p.start_date %}&start_date={{p.start_date}}{% endif %}{% if p.end_date %}&end_date={{p.end_date}}{% endif %}">Предзаказ</a></li>
+                                <li class="list-group-item {% if p.ispreorder == 'False' %} list-group-item-info {% endif %}">
+                                    <a href="?{% if p.order %}order={{ p.order }}&{% endif %}{% if p.status %}status={{p.status}}&{% endif %}ispreorder=False{% if p.start_date %}&start_date={{p.start_date}}{% endif %}{% if p.end_date %}&end_date={{p.end_date}}{% endif %}">Из наличия</a></li>
+                                <li class="list-group-item {% if not p.ispreorder%} list-group-item-info {% endif %}">
+                                    <a href="?{% if p.order %}order={{ p.order }}&{% endif %}{% if p.status %}status={{p.status}}&{% endif %}{% if p.start_date %}&start_date={{p.start_date}}{% endif %}{% if p.end_date %}&end_date={{p.end_date}}{% endif %}">Все</a></li>
+                            </ul>
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $(function () {
+    $('#{{form.start_date.id_for_label}}').datetimepicker(
+    {locale: 'ru', format: 'YYYY-MM-DD'
+    });
+    $('#{{form.end_date.id_for_label}}').datetimepicker(
+    {locale: 'ru', format: 'YYYY-MM-DD'
+    });
+    $("#{{form.start_date.id_for_label}}").on("dp.change",function (e) {
+      $("#{{form.end_date.id_for_label}}").data("DateTimePicker").minDate(e.date);
+    });
+    $("#{{form.end_date.id_for_label}}").on("dp.change",function (e) {
+    $("#{{form.start_date.id_for_label}}").data("DateTimePicker").maxDate(e.date);
+    });
+  });
+</script>
+
+{% endblock %}
+
+
+

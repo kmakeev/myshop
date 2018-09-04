@@ -1,0 +1,26 @@
+<!-- HTML-код модального окна -->
+<div id="restorePwd" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Заголовок модального окна -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Восстановление пароля</h3>
+      </div>
+
+      <div class="modal-body">
+          <div class="container-fluid">
+              <div class="col-md-8 col-md-offset-2">
+                  <div class="form-group">
+                      {{ email_form.as_div }}
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Футер модального окна -->
+      <div class="modal-footer">
+            <button type="submit", class="btn btn-success btn-lg" name="Restore" > Отправить </button>
+      </div>
+    </div>
+  </div>
+</div>

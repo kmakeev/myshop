@@ -1,0 +1,17 @@
+
+Здравствуйте {{ first_name }}!
+Статус Вашего заказ № {{ order.id }} сформированного {{ order.datetime|date:"d E Y" }} в {{ order.datetime|time:"H" }}:{{ order.datetime|time:"i" }}, изменился на {{ order.get_status_display }}
+Позиции заказа:
+Номер п/п   Наименование    Цена     Количество     Сумма   Предзаказ
+{% for item in positions %}
+ {{ forloop.counter }}   {{ item.product.product.name }}     {{ item.product.cost  }}   {{ item.quantity }}     {{ item.amount }}    {% if item.is_preorder %} Предзаказ {% else %} Из наличия {% endif %}
+{% endfor %}
+Всего {{ positions|length }} на - {{ order.list.summ }} р.
+
+Проверить статус заказа, можно зайдя на сайт под свой учетной записью.
+Если у Вас возникли вопросы, напишите нам по электронной почте myamp.online@gmail.com
+
+С Уважением !
+
+MyAmp.Online, Russian, Moscow, 2017
+myamp.online@gmail.com

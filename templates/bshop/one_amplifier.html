@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<div class="col-sm-4 col-lg-4 col-md-4">
+    <div class="thumbnail">
+        <!-- <img src="http://placehold.it/320x150" alt=""> -->
+        <a href={{ item.id }} > <img src={% static item.get_image %} width="320" height="150" alt=""/> </a>
+        <div class="caption">
+            <h5 class="pull-right">{{ item.cost }}</h5>
+            <h5> <a href={{ item.id }}  >{{ item.name }}</a> </h5>
+            {% if item.description|length < 100 %}
+            <p> {{ item.description }} </p>
+            {% else %}
+            <p title="{{ item.description }}"> {{ item.description|slice:":100" }}... </p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>

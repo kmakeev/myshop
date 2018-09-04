@@ -1,0 +1,45 @@
+{% extends "bshop/base.html" %}
+{%load staticfiles %}
+{% block order %}
+<div class="container">
+    <div class="row visible-sm-block" style="padding-top: 40px"></div>
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="/">Главная</a> </li>
+            <li><a href="/orders/">Мои заказы</a> </li>
+            <li class="active">Заказ № {{ order.id }}, от {{ order.datetime }}</li>
+        </ol>
+        <div class="col-md-12">
+            <H3> Заказ № {{ order.id }}, создан {{ order.datetime|date:"d E Y" }} в {{ order.datetime|time:"H" }}:{{ order.datetime|time:"i" }}, статус {{ order.get_status_display }} </H3>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <tbody>
+                        <tr>
+                            <th> Номер п/п </th>
+                            <th> Наименование </th>
+                            <th> Цена </th>
+                            <th> Количество </th>
+                            <th> Сумма </th>
+                            <th> Предзаказ </th>
+                        </tr>
+                        {% for item in positions %}
+                        <tr>
+                            <td> {{ forloop.counter }} </td>
+                            <td> <a href= "{{item.product.get_absolute_url }}" > {{ item.product.product.name }} </a>  </td>
+                            <td> {{ item.product.cost }} р. </td>
+                            <td> {{ item.quantity }} </td>
+                            <td> {{ item.amount }} р. </td>
+                            <td> {% if item.is_preorder %} Предзаказ {% else %} Из наличия {% endif %} </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td> Всего {{ positions|length }} на - {{ order.list.summ }} руб.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

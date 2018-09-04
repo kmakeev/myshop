@@ -1,0 +1,70 @@
+{% extends "bshop/base.html" %}
+
+{% block row %}
+
+    <div class="container">
+        <div class="row visible-sm-block" style="padding-top: 40px"></div>
+        <div class="row">
+                {% block hierarchy %}
+                <ol class="breadcrumb">
+                    <li class="active">Главная</li>
+                </ol>
+                 {% endblock %}
+            <div class="col-md-3 hidden-xs hidden-sm">
+                <p class="lead">Каталог</p>
+                    {% include "bshop/catalog.html" %}
+                <p class="lead">Фильтр</p>
+                    {% include "bshop/filter.html" %}
+                <p class="lead">Сортировка</p>
+                    {% include "bshop/sort.html" %}
+                <H4>Друзья</H4>
+                <H4> <a href="http://radioland.1bbs.info">radioland.1bbs.info</a></H4>
+            </div>
+            <div class="col-md-3 hidden-md hidden-lg">
+                <div class="btn-group btn-block">
+                    <button type="button" data-toggle="dropdown" class="btn btn-primary btn-lg dropdown-toggle" style="width:100%">
+                        {% if path == '/' %}
+                            Каталог
+                        {% else %}
+                            {% for item in menu %}
+                                {% if item.get_absolute_url in path %} {{ item.name }}{% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <span class="caret" ></span> </button>
+                    {% include "bshop/catalog_in_btn.html" %}
+                </div>
+                <div class="btn-group btn-block">
+                    <button type="button" data-toggle="dropdown" class="btn btn-info btn-lg dropdown-toggle" style="width:100%">
+                        Фильтр
+                        {% if p.ispreorder == 'True' %}
+                        <small> - Предзаказ</small>
+                        {% elif p.ispreorder == 'False' %}
+                        <small> - Из наличия</small>
+                        {% endif %}
+                        <span class="caret"></span> </button>
+                    {% include "bshop/filter_in_btn.html" %}
+                </div>
+                <H4>Друзья</H4>
+                <H4> <a href="http://radioland.1bbs.info">radioland.1bbs.info</a></H4>
+            </div>
+            <div class="col-md-9">
+                {% include "bshop/carousel.html" %}
+                {% block rows %}
+                <div class="row">
+                    {% if found_entries %}
+                    <h2> <small> {{ query_string }} </small></h2>
+                    {% include "bshop/filter-panel.html" %}
+                    {% for item in found_entries %}
+                        {% include "bshop/one_item_for_search.html" %}
+                    {% endfor %}
+                    {% else %}
+                        <h2> <small> Нет информации для отображения  </small></h2>
+                    {% endif %}
+                </div>
+                {% endblock %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

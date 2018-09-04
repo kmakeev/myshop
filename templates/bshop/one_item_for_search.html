@@ -1,0 +1,23 @@
+{% load staticfiles %}
+{% if item.is_not_arhive %}
+<div class="col-sm-4 col-lg-4 col-md-4">
+    <div class="thumbnail">
+        <!-- <img src="http://placehold.it/320x150" alt=""> -->
+        <a href={{ item.product.category.get_absolute_url }}{{ item.id }} > <img src={% static item.product.get_image %} width="320" height="150" alt=""/> </a>
+        <div class="caption">
+            <h5 class="pull-right">{{ item.cost }} р.</h5>
+            <h5> <a href={{ item.product.category.get_absolute_url }}{{ item.id }}  >{{ item.product.name }}</a> </h5>
+            <h5> {% if item.is_in_stock %} <p> В наличии - {{ item.quantity }} {% else %} Нет в наличии </p>
+                 {% if item.is_preorder %} <p> Доступен для предзаказа{% else %} Предзаказ не возможен  </p>{% endif %}
+                 {% endif %}</h5>
+         <!--   <p>{{ item.product.description }} </p> -->
+        </div>
+
+        <div class="ratings">
+            <p> </p>
+
+        </div>
+
+    </div>
+</div>
+{% endif %}

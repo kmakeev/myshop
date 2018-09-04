@@ -1,0 +1,26 @@
+<!-- HTML-код модального окна -->
+<div id="confirmCart" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Заголовок модального окна -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Оформление заказа</h4>
+      </div>
+
+      <div class="modal-body">
+        <p> Товар из корзины на сумму {{ summ_in_cart }} р. будет оформлен в заказ.</p>
+        <p> Позднее с Вами свяжутся для уточнения подробностей и порядка оплаты. </p>
+
+        {{ form }}
+        {% csrf_token %}
+       <!-- <a href="/accounts/login/?next={{ path }}"> <H4> Я уже зарегистрирован на сайте </H4> </a> -->
+      </div>
+      <!-- Футер модального окна -->
+      <div class="modal-footer">
+            <button type="submit", class="btn btn-success btn-lg" name="Order" > Оформить </button>
+            <a href="/cart/" class="btn btn-default btn-lg" data-dismiss="modal">Оформить заказ позднее</a>
+      </div>
+    </div>
+  </div>
+</div>

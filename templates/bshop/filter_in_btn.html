@@ -1,0 +1,8 @@
+<ul class="dropdown-menu" role="menu">
+    <li>
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.sort %}sort={{p.sort}}&{% endif %}ispreorder=True">Предзаказ</a></li>
+    <li>
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.sort %}sort={{p.sort}}&{% endif %}ispreorder=False">Из наличия</a></li>
+    <li>
+        <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.sort %}sort={{p.sort}}&{% endif %}">Все</a></li>
+</ul>

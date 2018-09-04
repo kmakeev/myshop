@@ -1,0 +1,40 @@
+{% extends "bshop/base.html" %}
+{%load staticfiles %}
+{% block orders %}
+
+<div class="container">
+    <div class="row visible-sm-block" style="padding-top: 40px"></div>
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="/">Главная</a> </li>
+            <li class="active">Мои заказы</li>
+        </ol>
+        <div class="col-md-12">
+            <H3>Мои заказы </H3>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <tbody>
+                            <tr>
+                                <th> Номер </th>
+                                <th> Дата, время создания </th>
+                                <th> Статус </th>
+                                <th> Сумма </th>
+                                <th> Комментарий </th>
+                            </tr>
+                            {% for item in orders %}
+                            <tr>
+                                <td> <a href= "{{item.get_absolute_url }}" > {{ item.id }} </a>  </td>
+                                <td> {{ item.datetime|date:"d E Y" }}, {{ item.datetime|time:"H" }}:{{ item.datetime|time:"i" }} </td>
+                                <td> {{ item.get_status_display }} </td>
+                                <td> {{ item.list.summ }} </td>
+                                <td> {{ item.comment }}  </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

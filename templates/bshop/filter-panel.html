@@ -1,0 +1,12 @@
+<div class="panel panel-default hidden-md hidden-lg"">
+    <div class="panel-heading">
+        <p class="text-center"> <big> Сортировка:
+        {% for item in sort %}
+            <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.ispreorder %}ispreorder={{p.ispreorder}}&{% endif %}sort={{ item.0 }}">
+                {% if p.sort != item.0 %} <ins>{{ item.1 }}</ins> {% else %}{{ item.1 }}{% endif %}</a>
+        {% endfor %}
+            <a href="?{% if p.q %}q={{ p.q }}&{% endif %}{% if p.ispreorder %}ispreorder={{p.ispreorder}}{% endif %}">
+                {% if not p.sort %} Автоматически {% else %} <ins> Автоматически </ins> {% endif %}</a>
+        </big> </p>
+    </div>
+</div>

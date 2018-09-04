@@ -1,0 +1,25 @@
+{% extends "bshop/content.html" %}
+
+{% block rows %}
+    <div class="row">
+        {% if content %}
+        <h2> <small> {{ query_string }} </small></h2>
+        {% for item in content %}
+            {% include "bshop/one_item.html" %}
+        {% endfor %}
+        {% else %}
+        <h2> <small> Нет информации для отображения  </small></h2>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block hierarchy %}
+    <ol class="breadcrumb">
+        <li> <a href="/">Главная </a></li>
+        <li class="active">
+        {% for item in menu %}
+        {% if item.get_absolute_url in path %} {{ item.name }}{% endif %}
+        {% endfor %}
+        </li>
+    </ol>
+{% endblock %}
